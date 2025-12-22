@@ -1,0 +1,5 @@
+export DISPLAY=:0
+if command -v xhost >/dev/null 2>&1; then
+    xhost +SI:localuser:$(whoami)
+fi
+$(which java) sshGui.java
