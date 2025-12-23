@@ -29,7 +29,7 @@ public class sshGui {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     l1.setText("You have selected " + list1.getSelectedItem());
-                    new sshGui().sshConneciton();
+                    new sshGui().sshConneciton(list1.getSelectedIndex());
                 }
             }
         });
@@ -50,10 +50,26 @@ public class sshGui {
 
     }
 
-    public void sshConneciton() {
-        System.out.println("sshConnection");
+    public void sshConneciton(int connectionNum) {
+        System.out.println(connectionNum);
         try {
-            Process p = Runtime.getRuntime().exec(new String[]{"ghostty"});
+            switch (connectionNum) {
+                case 0:
+                    Process p00 = Runtime.getRuntime().exec(new String[]{"ghostty", "-e", "ssh", "lucas@192.168.0.6"});
+                    break;
+                case 1:
+                    Process p1 = Runtime.getRuntime().exec(new String[]{"echo", "2"});
+                    break;                                                    
+                case 2:                                                      
+                    Process p2 = Runtime.getRuntime().exec(new String[]{"echo", "3"});
+                    break;                                                    
+                case 3:                                                       
+                    Process p3 = Runtime.getRuntime().exec(new String[]{"echo", "4"});
+                    break;                                                    
+                case 4:                                                       
+                    Process p4 = Runtime.getRuntime().exec(new String[]{"echo", "5"});
+                    break;
+            }
         } catch (IOException exception) {
             exception.printStackTrace();
         }
