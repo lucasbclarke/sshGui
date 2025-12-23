@@ -24,21 +24,13 @@ public class sshGui {
         list1.add("Item 4");
         list1.add("Item 5");
 
-        list1.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent e) {
-                list1.addKeyListener(new KeyAdapter() {
-                    public void keyPressed(KeyEvent e) {
-                        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                            l1.setText("You have selected " + list1.getSelectedItem());
-                            try {
-                                Process p = Runtime.getRuntime().exec(new String[]{"ghostty"});
-                            } catch (IOException exception) {
-                                exception.printStackTrace();
-                            }
-                        }
-                    }
-                });
-
+        list1.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    l1.setText("You have selected " + list1.getSelectedItem());
+                    new sshGui().sshConneciton();
+                }
             }
         });
 
@@ -58,10 +50,16 @@ public class sshGui {
 
     }
 
-    public static void main(String args[]) {
-        sshGui g = new sshGui();
-        g.sshGui();
-
+    public void sshConneciton() {
+        System.out.println("sshConnection");
+        try {
+            Process p = Runtime.getRuntime().exec(new String[]{"ghostty"});
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
     }
 
+    public static void main(String args[]) {
+        new sshGui().sshGui();
+    }
 }
