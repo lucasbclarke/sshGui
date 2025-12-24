@@ -1,6 +1,7 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 
 if (command -v ghostty >/dev/null 2>&1); then
+:
 else
   echo "ghostty not found"
   exit
@@ -18,6 +19,7 @@ if (command -v dotool >/dev/null 2>&1); then
     { echo keydown leftmeta; echo keydown leftshift; echo key space;} | dotool
     
     if (swaymsg -t get_tree | grep -q 'SSH Server Selection'); then
+    :
     else 
         { echo keydown leftmeta; echo keydown leftshift; echo key space;} | dotool
     fi
