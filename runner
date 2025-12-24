@@ -1,5 +1,11 @@
 #!/usr/bin/env zsh
 
+if (command -v ghostty >/dev/null 2>&1); then
+else
+  echo "ghostty not found"
+  exit
+fi
+
 export DISPLAY=:0
 if command -v xhost >/dev/null 2>&1; then
     xhost +SI:localuser:$(whoami)
@@ -7,10 +13,15 @@ fi
 
 $(which java) ~/java-code/ssh-gui/sshGui.java &
 sleep .5
-{ echo keydown leftmeta; echo key l; } | dotool
-{ echo keydown leftmeta; echo keydown leftshift; echo key space;} | dotool
-
-if (swaymsg -t get_tree | grep -q 'SSH Server Selection'); then
-else 
+if (command -v dotool >/dev/null 2>&1); then
+    { echo keydown leftmeta; echo key l; } | dotool
     { echo keydown leftmeta; echo keydown leftshift; echo key space;} | dotool
+    
+    if (swaymsg -t get_tree | grep -q 'SSH Server Selection'); then
+    else 
+        { echo keydown leftmeta; echo keydown leftshift; echo key space;} | dotool
+    fi
+else
+    echo "dotool not found"
+    exit
 fi
