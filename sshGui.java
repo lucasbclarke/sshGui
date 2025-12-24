@@ -2,8 +2,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 
-import static javax.swing.JOptionPane.*;
-
 public class sshGui {
     Label l1;
 
@@ -11,64 +9,59 @@ public class sshGui {
         Frame f = new Frame("SSH Server Selection");
 
         l1 = new Label("Select option");
-        l1.setBounds(300, 50, 380, 80);
+        l1.setBounds(55, 25, 290, 40);
         f.add(l1);
 
         List list1 = new List(5);
-        list1.setBounds(250, 150, 200, 90);
+        list1.setBounds(65, 65, 120, 50);
         f.add(list1);
 
-        list1.add("Item 1");
-        list1.add("Item 2");
-        list1.add("Item 3");
-        list1.add("Item 4");
-        list1.add("Item 5");
+        list1.add("Pi-hole server");
+        list1.add("Minecraft server");
 
         list1.addKeyListener(new KeyAdapter() {
-            @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     l1.setText("You have selected " + list1.getSelectedItem());
+                    l1.setLocation(20, 25);
                     new sshGui().sshConneciton(list1.getSelectedIndex());
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ie) {
+                        System.err.println("Thread sleep was interrupted: " + ie.getMessage());
+                        Thread.currentThread().interrupt(); 
+                    }
+                    f.dispose();
+                }
+                if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_P) {
+                    list1.select(list1.getSelectedIndex() - 1);
+                }
+                if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_N) {
+                    list1.select(list1.getSelectedIndex() + 1);
                 }
             }
         });
 
-
-        f.setSize(800, 800);
+        f.setSize(285, 150);
         f.setLayout(null);
         f.setVisible(true);
 
         f.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent event) {
-                if (showConfirmDialog(f, "Are you sure you want to exit?", "Exiting Application!", YES_NO_OPTION, WARNING_MESSAGE) == YES_OPTION) {
-                    System.exit(0);
-                }
-
+                System.exit(0);
             }
         });
-
     }
 
     public void sshConneciton(int connectionNum) {
-        System.out.println(connectionNum);
         try {
             switch (connectionNum) {
                 case 0:
-                    Process p00 = Runtime.getRuntime().exec(new String[]{"ghostty", "-e", "ssh", "lucas@192.168.0.6"});
+                    Process p0 = Runtime.getRuntime().exec(new String[]{"ghostty", "-e", "ssh", "lucas@192.168.0.6"});
                     break;
                 case 1:
-                    Process p1 = Runtime.getRuntime().exec(new String[]{"echo", "2"});
+                    Process p1 = Runtime.getRuntime().exec(new String[]{"ghostty", "-e", "ssh", "lucas@192.168.0.3"});
                     break;                                                    
-                case 2:                                                      
-                    Process p2 = Runtime.getRuntime().exec(new String[]{"echo", "3"});
-                    break;                                                    
-                case 3:                                                       
-                    Process p3 = Runtime.getRuntime().exec(new String[]{"echo", "4"});
-                    break;                                                    
-                case 4:                                                       
-                    Process p4 = Runtime.getRuntime().exec(new String[]{"echo", "5"});
-                    break;
             }
         } catch (IOException exception) {
             exception.printStackTrace();

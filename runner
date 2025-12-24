@@ -5,8 +5,9 @@ if command -v xhost >/dev/null 2>&1; then
     xhost +SI:localuser:$(whoami)
 fi
 
-$(which java) sshGui.java &
-
+$(which java) ~/java-code/ssh-gui/sshGui.java &
+sleep .5
+{ echo keydown leftmeta; echo key l; } | dotool
 { echo keydown leftmeta; echo keydown leftshift; echo key space;} | dotool
 
 if (swaymsg -t get_tree | grep -q 'SSH Server Selection'); then
