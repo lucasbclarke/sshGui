@@ -1,6 +1,9 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 public class sshGui {
     Label l1;
@@ -57,15 +60,57 @@ public class sshGui {
         try {
             switch (connectionNum) {
                 case 0:
-                    Process p0 = Runtime.getRuntime().exec(new String[]{"ghostty", "-e", "ssh", "lucas@192.168.0.6"});
+                    Process p0 = Runtime.getRuntime().exec(new String[]{getTerminal(), "-e", "ssh", getServer(1)});
                     break;
                 case 1:
-                    Process p1 = Runtime.getRuntime().exec(new String[]{"ghostty", "-e", "ssh", "lucas@192.168.0.3"});
+                    Process p1 = Runtime.getRuntime().exec(new String[]{getTerminal(), "-e", "ssh", getServer(2)});
                     break;                                                    
             }
         } catch (IOException exception) {
             exception.printStackTrace();
         }
+    }
+
+    public String getTerminal() {
+        File config = new File("config");
+        try (Scanner sc = new Scanner(config)) {
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine().trim();
+                if (line.startsWith("terminal=")) {
+                    String com = line.substring("terminal=".length()).trim();
+                    if (!com.isEmpty()) {
+                        return com;
+                    }
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Config file not found: " + e.getMessage());
+            e.printStackTrace();
+        }
+        System.out.println("No terminal found in config. Using default terminal.");
+        return "ghostty";
+    }
+
+    public String getServer(int serverNum) {
+        File config = new File("config");
+        try (Scanner sc = new Scanner(config)) {
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine().trim();
+                String server = "server" + Integer.toString(serverNum) + "=";
+                if (line.startsWith(server)) {
+                    String com = line.substring(server.length()).trim();
+                    if (!com.isEmpty()) {
+                        return com;
+                    }
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Config file not found: " + e.getMessage());
+            e.printStackTrace();
+        }
+        System.out.println("No terminal found in config. Using default terminal.");
+        return "ghostty";
+
     }
 
     public static void main(String args[]) {

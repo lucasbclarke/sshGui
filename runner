@@ -1,12 +1,4 @@
 #!/usr/bin/env bash
-
-if (command -v ghostty >/dev/null 2>&1); then
-:
-else
-  echo "ghostty not found"
-  exit
-fi
-
 export DISPLAY=:0
 if command -v xhost >/dev/null 2>&1; then
     xhost +SI:localuser:$(whoami)
