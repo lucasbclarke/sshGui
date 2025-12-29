@@ -2,8 +2,6 @@ terminal = ghostty
 
 server 1 = lucas@192.168.0.6
 server 2 = lucas@192.168.0.3
-server 3 = terminal.shop
 
 server 1 name = Pi-hole server 
 server 2 name = Minecraft Server
-server 3 name = TEST

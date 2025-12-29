@@ -14,7 +14,7 @@ public class sshGui {
         try (Scanner sc = new Scanner(config)) {
             while (sc.hasNextLine()) {
                 String line = sc.nextLine().trim();
-                if (line.startsWith("terminal = " )) {
+                if (line.startsWith("terminal = ")) {
                     String com = line.substring("terminal = ".length()).trim();
                     if (!com.isEmpty()) {
                         return com;
@@ -48,7 +48,6 @@ public class sshGui {
         }
         System.out.println("No server found in config");
         return "error";
-
     }
 
     public String getServerName(int serverNum) {
@@ -70,10 +69,9 @@ public class sshGui {
         }
         System.out.println("No server name found in config, using server number provided");
         return Integer.toString(serverNum);
-
     }
 
-    public void sshConneciton(int connectionNum) {
+    public void sshConneciton(int connectionNum, Label label) {
         try {
             switch (connectionNum) {
                 case 0:
@@ -81,14 +79,52 @@ public class sshGui {
                     break;
                 case 1:
                     Process p1 = Runtime.getRuntime().exec(new String[]{getTerminal(), "-e", "ssh", getServerAddress(2)});
-                    break;                                                    
+                    break;
+                case 2:
+                    Process p2 = Runtime.getRuntime().exec(new String[]{getTerminal(), "-e", "ssh", getServerAddress(3)});
+                    break;
+                case 3:
+                    Process p3 = Runtime.getRuntime().exec(new String[]{getTerminal(), "-e", "ssh", getServerAddress(4)});
+                    break;
+                case 4:
+                    Process p4 = Runtime.getRuntime().exec(new String[]{getTerminal(), "-e", "ssh", getServerAddress(5)});
+                    break;
+                default:
+                    label.setText("You cannot connect to a server with a number greater than 5");
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ie) {
+                        System.err.println("Thread sleep was interrupted: " + ie.getMessage());
+                        Thread.currentThread().interrupt();
+                    }
+
+                    break;
             }
         } catch (IOException exception) {
             exception.printStackTrace();
         }
     }
 
-    public void sshGui() {
+    public int totalServers() {
+        int totalServers = 0;
+        File config = new File("config");
+        try (Scanner sc = new Scanner(config)) {
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine().trim();
+                Pattern p = Pattern.compile("server \\d name = ");
+                if (p.matcher(line).find()) {
+                    totalServers++;
+                }
+            }
+            return totalServers;
+        } catch (FileNotFoundException e) {
+            System.err.println("Config file not found: " + e.getMessage());
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public void setupGui() {
         Frame f = new Frame("SSH Server Selection");
 
         l1 = new Label("Select option");
@@ -99,23 +135,7 @@ public class sshGui {
         list1.setBounds(65*2, 65*2, 120*2, 50*2);
         f.add(list1);
 
-        int totalServers = 0;
-
-        File config = new File("config");
-        try (Scanner sc = new Scanner(config)) {
-            while (sc.hasNextLine()) {
-                String line = sc.nextLine().trim();
-                Pattern p = Pattern.compile("server \\d name = ");
-                if (p.matcher(line).find()) {
-                    totalServers++;
-                }
-            }
-        } catch (FileNotFoundException e) {
-            System.err.println("Config file not found: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        for (int i = 1; i <= totalServers; i++) {
+        for (int i = 1; i <= totalServers(); i++) {
             list1.add(getServerName(i));
         }
 
@@ -124,12 +144,12 @@ public class sshGui {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     l1.setText("You have selected " + list1.getSelectedItem());
                     l1.setLocation(20, 25);
-                    new sshGui().sshConneciton(list1.getSelectedIndex());
+                    new sshGui().sshConneciton(list1.getSelectedIndex(), l1);
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException ie) {
                         System.err.println("Thread sleep was interrupted: " + ie.getMessage());
-                        Thread.currentThread().interrupt(); 
+                        Thread.currentThread().interrupt();
                     }
                     f.dispose();
                 }
@@ -154,6 +174,6 @@ public class sshGui {
     }
 
     public static void main(String args[]) {
-        new sshGui().sshGui();
+        new sshGui().setupGui();
     }
 }
