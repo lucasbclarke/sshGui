@@ -73,32 +73,16 @@ public class sshGui {
 
     public void sshConneciton(int connectionNum, Label label) {
         try {
-            switch (connectionNum) {
-                case 0:
-                    Process p0 = Runtime.getRuntime().exec(new String[]{getTerminal(), "-e", "ssh", getServerAddress(1)});
-                    break;
-                case 1:
-                    Process p1 = Runtime.getRuntime().exec(new String[]{getTerminal(), "-e", "ssh", getServerAddress(2)});
-                    break;
-                case 2:
-                    Process p2 = Runtime.getRuntime().exec(new String[]{getTerminal(), "-e", "ssh", getServerAddress(3)});
-                    break;
-                case 3:
-                    Process p3 = Runtime.getRuntime().exec(new String[]{getTerminal(), "-e", "ssh", getServerAddress(4)});
-                    break;
-                case 4:
-                    Process p4 = Runtime.getRuntime().exec(new String[]{getTerminal(), "-e", "ssh", getServerAddress(5)});
-                    break;
-                default:
-                    label.setText("You cannot connect to a server with a number greater than 5");
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException ie) {
-                        System.err.println("Thread sleep was interrupted: " + ie.getMessage());
-                        Thread.currentThread().interrupt();
-                    }
-
-                    break;
+            if (connectionNum >= 0 && connectionNum < totalServers()) {
+                Process p = Runtime.getRuntime().exec(new String[]{getTerminal(), "-e", "ssh", getServerAddress(connectionNum + 1)});
+            } else {
+                label.setText("Invalid server selection. Please select a server from the list.");
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ie) {
+                    System.err.println("Thread sleep was interrupted: " + ie.getMessage());
+                    Thread.currentThread().interrupt();
+                }
             }
         } catch (IOException exception) {
             exception.printStackTrace();
