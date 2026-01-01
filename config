@@ -1,7 +1,7 @@
 terminal = ghostty
 
-server 1 = lucas@192.168.0.6
-server 2 = lucas@192.168.0.3
+server 1 = terminal.shop
+server 2 = bandit.overthewire.org
 
-server 1 name = Pi-hole server 
-server 2 name = Minecraft Server
+server 1 name = SSH Coffee
+server 2 name = OverTheWire
