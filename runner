@@ -4,7 +4,7 @@ if command -v xhost >/dev/null 2>&1; then
     xhost +SI:localuser:$(whoami)
 fi
 
-$(which java) ~/java-code/ssh-gui/sshGui.java &
+$(which java) sshGui.java &
 sleep .5
 if (command -v dotool >/dev/null 2>&1); then
     { echo keydown leftmeta; echo key l; } | dotool
