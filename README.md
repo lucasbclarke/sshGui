@@ -6,7 +6,4 @@ within the runner script is due to the fact that I use the Sway window manager a
 if you do not use Sway. The commands at the top of the runner file also ensure compatiblity with other linux distributions so the program displays correctly. To run this program the
 latest version of the JDK is required (default-jdk or equivilant). At the moment there is no windows support as the ssh command works differently to how it does on linux, however this
 may be implemented in the future. This code may or may not work on Mac systems, I do not know as I have no way to test this.
-<video>
-    <source src="execution-demonstration.mp4" type="video/mp4">
-    Unfortunately the video was not able to render correctly.
-</video>
+![Execution Demonstration](execution-demonstration.gif)
