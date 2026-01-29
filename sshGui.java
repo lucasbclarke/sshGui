@@ -74,7 +74,11 @@ public class sshGui {
     public void sshConneciton(int connectionNum, Label label) {
         try {
             if (connectionNum >= 0 && connectionNum < totalServers()) {
-                Process p = Runtime.getRuntime().exec(new String[]{getTerminal(), "-e", "ssh", getServerAddress(connectionNum + 1)});
+                if (getTerminal() == "powershell") {
+                    Process p = Runtime.getRuntime().exec(new String[]{getTerminal(), "-NoExit", "-Command", "ssh", getServerAddress(connectionNum + 1)});
+                } else {
+                    Process p = Runtime.getRuntime().exec(new String[]{getTerminal(), "-e", "ssh", getServerAddress(connectionNum + 1)});
+                }
             } else {
                 label.setText("Invalid server selection. Please select a server from the list.");
                 try {
