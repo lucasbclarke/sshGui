@@ -77,10 +77,25 @@ public class sshGui {
                 Process p;
                 switch (getTerminal()) {
                     case "powershell": 
-                        p = Runtime.getRuntime().exec(new String[]{"powershell", "-Command", "Start-Process powershell -ArgumentList '-Command ssh " + getServerAddress(connectionNum + 1) + "'"});
+                        p = Runtime.getRuntime().exec(new String[]{"powershell", "-Command", "Start-Process powershell -ArgumentList '-NoProfile -Command ssh " + getServerAddress(connectionNum + 1) + "; exit'"});
                         break;
                     case "cmd":
-                        p = Runtime.getRuntime().exec(new String[]{"cmd", "/c", "start", "cmd", "/k", "ssh " + getServerAddress(connectionNum + 1)});
+                        p = Runtime.getRuntime().exec(new String[]{"cmd", "/c", "start", "cmd", "/c", "ssh " + getServerAddress(connectionNum + 1)});
+                        break;
+                    case "gnome-terminal":
+                        p = Runtime.getRuntime().exec(new String[]{"gnome-terminal", "--", "/bin/sh", "-c", "exec ssh " + getServerAddress(connectionNum + 1)});
+                        break;
+                    case "konsole", "lxterminal":
+                        p = Runtime.getRuntime().exec(new String[]{getTerminal(), "-e", "bash", "-c", "exec ssh " + getServerAddress(connectionNum + 1)});
+                        break;
+                    case "xfce4-terminal", "mate-terminal":
+                        p = Runtime.getRuntime().exec(new String[]{getTerminal(), "--execute", "bash", "-c", "exec ssh " + getServerAddress(connectionNum + 1)});
+                        break;
+                    case "cosmic-term":
+                        p = Runtime.getRuntime().exec(new String[]{"cosmic-term", "-e", "bash", "-c", "exec ssh " + getServerAddress(connectionNum + 1)});
+                        break;
+                    case "ptyxis":
+                        p = Runtime.getRuntime().exec(new String[]{"ptyxis", "--execute", "ssh " + getServerAddress(connectionNum + 1)});
                         break;
                     default:
                         p = Runtime.getRuntime().exec(new String[]{getTerminal(), "-e", "ssh", getServerAddress(connectionNum + 1)});
